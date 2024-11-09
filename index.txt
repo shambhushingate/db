@@ -1,0 +1,29 @@
+// Insert information in Customer collection
+db.customer.insertMany([ 
+  { "custID": "A123", "Amount": 500, "status": "A" }, 
+  { "custID": "A123", "Amount": 250, "status": "A" }, 
+  { "custID": "B212", "Amount": 200, "status": "A" }, 
+  { "custID": "A123", "Amount": 300, "status": "D" } 
+]);
+
+
+// 1. Create an index on a field (e.g., custID)
+db.customer.createIndex({ custID: 1 });
+
+// 2. List all indexes on the 'customer' collection
+db.customer.getIndexes();
+
+// 3. Drop a specific index (e.g., on custID)
+db.customer.dropIndex({ custID: 1 });
+
+// 4. Drop all indexes except the default _id index
+db.customer.dropIndexes();
+
+// 5. Create a compound index on multiple fields (e.g., custID and status)
+db.customer.createIndex({ custID: 1, status: 1 });
+
+// 6. Check if an index exists on a specific field (e.g., custID)
+db.customer.indexExists('custID_1');
+
+// 7. Explain query execution plan to see if an index is being used
+db.customer.find({ custID: "A123" }).explain();

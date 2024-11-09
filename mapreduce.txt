@@ -1,0 +1,115 @@
+db.marks.insertMany([
+    { name: "Raju", subject: "Physics", marks: 68 },
+    { name: "Raju", subject: "Chemistry", marks: 98 },
+    { name: "Raju", subject: "Football", marks: 77 },
+    { name: "Kartik", subject: "Physics", marks: 67 },
+    { name: "Kartik", subject: "Chemistry", marks: 87 },
+    { name: "Kartik", subject: "Football", marks: 89 },
+    { name: "Sujal", subject: "Physics", marks: 67 },
+    { name: "Sujal", subject: "Chemistry", marks: 78 },
+    { name: "Sujal", subject: "Football", marks: 90 }
+]);
+
+
+
+
+
+### 1. Calculate Total Marks for Each Student
+
+
+var map = function() { 
+    emit(this.name, this.marks); 
+};
+
+var reduce = function(key, values) { 
+    return Array.sum(values); 
+};
+
+db.marks.mapReduce(
+    map, 
+    reduce, 
+    { out: "total_marks_students" }
+);
+
+
+
+### 2. Calculate Average Marks for Each Student
+
+
+var map = function() {
+    emit(this.name, { marks: this.marks, count: 1 });
+};
+
+var reduce = function(key, values) {
+    var reducedVal = { marks: 0, count: 0 };
+    values.forEach(function(value) {
+        reducedVal.marks += value.marks;
+        reducedVal.count += value.count;
+    });
+    return reducedVal;
+};
+
+var avgFunc = function(key, reducedVal) {
+    reducedVal.avg = reducedVal.marks / reducedVal.count;
+    return reducedVal;
+};
+
+db.marks.mapReduce(
+    map, 
+    reduce, 
+    { out: "avg_marks", finalize: avgFunc }
+);
+```
+
+
+
+### 3. Calculate Total and Average Marks for All Students Combined
+
+
+var map = function() { 
+    emit("total", { marks: this.marks, count: 1 }); 
+};
+
+db.marks.mapReduce(
+    map, 
+    reduce, 
+    { out: "marks_all", finalize: avgFunc }
+);
+
+
+### 4. Find Minimum and Maximum Marks for Each Student
+
+
+var map = function() {
+    emit(this.name, { min: this.marks, max: this.marks });
+};
+
+var reduce = function(key, values) {
+    var reducedVal = { min: Infinity, max: -Infinity };
+    values.forEach(function(value) {
+        if (value.min < reducedVal.min) reducedVal.min = value.min;
+        if (value.max > reducedVal.max) reducedVal.max = value.max;
+    });
+    return reducedVal;
+};
+
+db.marks.mapReduce(
+    map, 
+    reduce, 
+    { out: "min_max_each" }
+);
+
+
+
+### 5. Find the Overall Minimum and Maximum Marks Among All Students
+
+
+var map = function() { 
+    emit("total", { min: this.marks, max: this.marks }); 
+};
+
+db.marks.mapReduce(
+    map, 
+    reduce, 
+    { out: "min_max_all" }
+);

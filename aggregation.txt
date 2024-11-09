@@ -1,0 +1,66 @@
+// Insert information in Customer collection
+db.customer.insertMany([ 
+  { "custID": "A123", "Amount": 500, "status": "A" }, 
+  { "custID": "A123", "Amount": 250, "status": "A" }, 
+  { "custID": "B212", "Amount": 200, "status": "A" }, 
+  { "custID": "A123", "Amount": 300, "status": "D" } 
+]);
+
+
+// a) Find the total amount of each customer
+db.customer.aggregate([
+  { 
+    $group: { 
+      _id: "$custID", 
+      totalAmount: { $sum: "$Amount" } 
+    } 
+  }
+]);
+
+// b) Find the total amount of each customer whose status is A
+db.customer.aggregate([
+  { $match: { status: "A" } },
+  { 
+    $group: { 
+      _id: "$custID", 
+      totalAmount: { $sum: "$Amount" } 
+    } 
+  }
+]);
+
+// c) Find the minimum total amount of each customer whose Status is A
+db.customer.aggregate([
+  { $match: { status: "A" } },
+  { 
+    $group: { 
+      _id: "$custID", 
+      minAmount: { $min: "$Amount" } 
+    } 
+  }
+]);
+
+// d) Find the maximum total amount of each customer whose Status is A
+db.customer.aggregate([
+  { $match: { status: "A" } },
+  { 
+    $group: { 
+      _id: "$custID", 
+      maxAmount: { $max: "$Amount" } 
+    } 
+  }
+]);
+
+// e) Find the average total amount of each customer whose Status is A
+db.customer.aggregate([
+  { $match: { status: "A" } },
+  { 
+    $group: { 
+      _id: "$custID", 
+      avgAmount: { $avg: "$Amount" } 
+    } 
+  }
+]);
+
+
+
+
