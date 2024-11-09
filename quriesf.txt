@@ -1,0 +1,440 @@
+Assignment No: 1 
+Problem Statement: 
+Create employee collection in company database and insert at least 10 employee 
+information in 
+employee collection containing eid,ename,disignation,hiredate,salary,hobbies and 
+department. and 
+Execute following queries on employee collection. 
+1) To create company 
+database test> use 
+company 
+2) To create employee collection 
+company> db.createCollection("employee") 
+3) Insert at least 10 employee information in employee collection 
+Company> db.employee.insertMany([ 
+{ eid: 1, ename: "Amruta", designation: "Analyst", hiredate: new Date("2015-06-15"), 
+salary: 12000, hobbies: ["reading", "painting"], department: "Sales" }, 
+{ eid: 2, ename: "Sujit", designation: "Salesman", hiredate: new Date("2015-07-22"), 
+salary: 9500, hobbies: ["cricket", "reading"], department: "Sales" }, 
+{ eid: 3, ename: "Akash", designation: "Manager", hiredate: new Date("2016-01-15"), 
+salary: 20000, hobbies: ["music", "painting"], department: "HR" }, 
+{ eid: 4, ename: "Shubhangi", designation: "Clerk", hiredate: new Date("2015-08
+01"), salary: 8000, hobbies: ["traveling", "music"], department: "Production" }, 
+{ eid: 5, ename: "Pravin", designation: "Salesman", hiredate: new Date("2015-09
+10"), salary: 11000, hobbies: ["cricket", "painting"], department: "Sales" }, 
+{ eid: 6, ename: "Vandana", designation: "Analyst", hiredate: new Date("2015-10
+25"), salary: 13000, hobbies: ["reading", "traveling"], department: "Marketing" }, 
+{ eid: 7, ename: "Pushpa", designation: "Manager", hiredate: new Date("2014-03
+30"), salary: 18000, hobbies: ["music", "reading"], department: "Production" }, 
+{ eid: 8, ename: "Raghav", designation: "Clerk", hiredate: new Date("2015-11-15"), 
+salary: 7500, hobbies: ["painting", "cricket"], department: "HR" }, 
+{ eid: 9, ename: "Snehal", designation: "Salesman", hiredate: new Date("2015-12
+01"), salary: 10000, hobbies: ["music", "painting"], department: "Sales" }, 
+{ eid: 10, ename: "Bhakti", designation: "Analyst", hiredate: new Date("2016-02-01"), 
+salary: 12500, hobbies: ["reading", "music"], department: "Marketing" } 
+]) 
+Execute following queries on employee collection. 
+a) List the names of analysts and salesmen. 
+company> db.employee.find({ designation: { $in: ["Analyst", "Salesman"] } }, { 
+ename: 1, _id: 0 }); 
+[ 
+{ ename: 'Amruta' }, 
+{ ename: 'Sujit' }, 
+{ ename: 'Pravin' }, 
+{ ename: 'Vandana' }, 
+{ ename: 'Snehal' }, 
+{ ename: 'Bhakti' } 
+] 
+b) List the eid,ename and salary from employee collection. 
+company> db.employee.find({}, { eid: 1, ename: 1, salary: 1, _id: 0 
+}); [ 
+{ eid: 1, ename: 'Amruta', salary: 12000 }, 
+{ eid: 2, ename: 'Sujit', salary: 9500 }, 
+{ eid: 3, ename: 'Akash', salary: 20000 }, 
+{ eid: 4, ename: 'Shubhangi', salary: 8000 }, 
+{ eid: 5, ename: 'Pravin', salary: 11000 }, 
+{ eid: 6, ename: 'Vandana', salary: 13000 }, 
+{ eid: 7, ename: 'Pushpa', salary: 18000 }, 
+{ eid: 8, ename: 'Raghav', salary: 7500 }, 
+{ eid: 9, ename: 'Snehal', salary: 10000 }, 
+{ eid: 10, ename: 'Bhakti', salary: 12500 } 
+] 
+c) List names of employees who are not managers. 
+company> db.employee.find({ designation: { $ne: "Manager" } }, { ename: 1, _id: 0 
+}); [ 
+{ ename: 'Amruta' }, 
+{ ename: 'Sujit' }, 
+{ ename: 'Shubhangi' }, 
+{ ename: 'Pravin' }, 
+{ ename: 'Vandana' }, 
+{ ename: 'Raghav' }, 
+{ ename: 'Snehal' }, 
+{ ename: 'Bhakti' } 
+] 
+d) List the names of employees whose employee numbers are 1,3,7,9. 
+company> db.employee.find({ eid: { $in: [1, 3, 7, 9] } }, { ename: 1, _id: 0 
+}); [ 
+{ ename: 'Amruta' }, 
+{ ename: 'Akash' }, 
+{ ename: 'Pushpa' }, 
+{ ename: 'Snehal' } 
+] 
+e) List the names of all employees those having reading as a second hobby. 
+company> db.employee.find({ hobbies: { $size: 2, $eq: "reading" } }, { ename: 1, 
+_id: 0 }); 
+[ 
+{ ename: 'Amruta' }, 
+{ ename: 'Sujit' }, 
+{ ename: 'Vandana' }, 
+{ ename: 'Pushpa' }, 
+{ ename: 'Bhakti' } 
+] 
+f) 
+List employee names for those who have joined between 30 June and 31 Dec 2015. 
+company> db.employee.find({ hiredate: { $gte: new Date("2015-06-30"), $lte: 
+new Date("2015-12-31") } }, { ename: 1, _id:0 }); 
+[ 
+{ ename: 'Sujit' }, 
+{ ename: 'Shubhangi' }, 
+{ ename: 'Pravin' }, 
+{ ename: 'Vandana' }, 
+{ ename: 'Raghav' }, 
+{ ename: 'Snehal' } 
+] 
+g) List the different designations in the 
+company. company> 
+db.employee.distinct("designation"); [ 
+'Analyst', 'Clerk', 'Manager', 'Salesman' ] 
+h) List the eid,ename,salary of all employees whose salary is less than 10000. 
+company> db.employee.find({ salary: { $lt: 10000 } }, { eid: 1, ename: 1, salary: 1, 
+_id: 0 }); 
+[ 
+{ eid: 2, ename: 'Sujit', salary: 9500 }, 
+{ eid: 4, ename: 'Shubhangi', salary: 8000 }, 
+{ eid: 8, ename: 'Raghav', salary: 7500 } 
+] 
+i) 
+j) 
+List the name and designation of the employee who works in production 
+department. 
+company> db.employee.find({ department: "Production" }, { ename: 1, 
+designation: 1, _id: 0 }); 
+[ 
+{ ename: 'Shubhangi', designation: 'Clerk' }, 
+{ ename: 'Pushpa', designation: 'Manager' } 
+] 
+List the all employees whose name start with "A" letter. 
+company> db.employee.find({ ename: /^A/ }, { ename: 1, _id: 0 
+}); [ { ename: 'Amruta' }, { ename: 'Akash' } ] 
+k) List the all employees whose name containing "sh" string. 
+company> db.employee.find({ ename: /sh/ }, { ename: 1, _id: 0 
+}); [ { ename: 'Akash' }, { ename: 'Pushpa' } ] 
+l) 
+List the all employees whose names either start or end with “S”. 
+company> db.employee.find({ $or: [{ ename: /^S/ }, { ename: /S$/ }] }, { ename: 
+1, 
+_id: 0 }); 
+[ { ename: 'Sujit' }, { ename: 'Shubhangi' }, { ename: 'Snehal' } ] 
+m) List the names of employees whose department is not HR. 
+company> db.employee.find({ department: { $ne: "HR" } }, { ename: 1, _id: 0 
+}); [ 
+{ ename: 'Amruta' }, 
+{ ename: 'Sujit' }, 
+{ ename: 'Shubhangi' }, 
+{ ename: 'Pravin' }, 
+{ ename: 'Vandana' }, 
+{ ename: 'Pushpa' }, 
+{ ename: 'Snehal' }, 
+{ ename: 'Bhakti' } 
+] 
+n) List the number of employees working in sales department. 
+company> db.employee.countDocuments({ department: "Sales" 
+}); 4 
+o) List the number of designations available in the EMP 
+collections. company> 
+db.employee.distinct("designation").length; 
+4 
+p) List the eid,ename,salary of all employees whose salary in between 10000 to 20000. 
+company> db.employee.find({ salary: { $gte: 10000, $lte: 20000 } }, { eid: 1, 
+ename: 1, salary: 1, _id: 0 }); 
+[ 
+{ eid: 1, ename: 'Amruta', salary: 12000 }, 
+{ eid: 3, ename: 'Akash', salary: 20000 }, 
+{ eid: 5, ename: 'Pravin', salary: 11000 }, 
+{ eid: 6, ename: 'Vandana', salary: 13000 }, 
+{ eid: 7, ename: 'Pushpa', salary: 18000 }, 
+{ eid: 9, ename: 'Snehal', salary: 10000 }, 
+{ eid: 10, ename: 'Bhakti', salary: 12500 } 
+] 
+q) List the eid,ename of all employees whose salary is gretter than or equal to 15000. 
+company> db.employee.find({ salary: { $gte: 15000 } }, { eid: 1, ename: 1, _id: 0 
+}); [ { eid: 3, ename: 'Akash' }, { eid: 7, ename: 'Pushpa' } ] 
+r) List details of employees whose department is Sales and salary is 
+10000. company> db.employee.find({ department: "Sales", salary: 
+10000 }); 
+[ 
+{ 
+} 
+] 
+_id: 
+ObjectId('66a347b47735c6852fc4e4a3'), 
+eid: 9, 
+ename: 'Snehal', 
+designation: 'Salesman', 
+hiredate: ISODate('2015-12-01T00:00:00.000Z'), 
+salary: 10000, 
+hobbies: [ 'music', 'painting' ], 
+department: 'Sales' 
+s) List the names of employees those having reading and painting hobbies. 
+company> db.employee.find({ hobbies: { $all: ["reading", "painting"] } }, { 
+ename: 1, _id: 0 }); 
+[ { ename: 'Amruta' } ] 
+t) List the first hobby of all employees from the employee 
+collection. company> db.employee.find({}, { "hobbies.0": 1 ,_id: 
+0}); 
+[ 
+{ hobbies: [] }, 
+{ hobbies: [] }, 
+{ hobbies: [] }, 
+{ hobbies: [] }, 
+{ hobbies: [] }, 
+{ hobbies: [] }, 
+{ hobbies: [] }, 
+{ hobbies: [] }, 
+{ hobbies: [] }, 
+{ hobbies: [] } 
+] 
+u) List the names of all employees those having three different hobbies. 
+company> db.employee.find({ hobbies: { $size: 3 } }, { ename: 1, _id: 0 }); 
+
+
+
+### 1. Update the Salary of a Specific Employee (`updateOne`)
+
+Updating the salary of the employee "Amruta" (eid: 1).
+
+```javascript
+db.employee.updateOne(
+    { eid: 1 },
+    { $set: { salary: 13000 } }
+)
+```
+
+### 2. Increase Salary for All Sales Department Employees (`updateMany`)
+
+Increasing the salary by 10% for all employees in the "Sales" department.
+
+```javascript
+db.employee.updateMany(
+    { department: "Sales" },
+    { $mul: { salary: 1.10 } }  // multiply salary by 1.10 to increase by 10%
+)
+```
+
+### 3. Add a New Field for "Experience" (`updateMany`)
+
+Add a new field `experience` for all employees, indicating "Senior" if they were hired before 2016.
+
+```javascript
+db.employee.updateMany(
+    { hiredate: { $lt: new Date("2016-01-01") } },
+    { $set: { experience: "Senior" } }
+)
+```
+
+### 4. Replace an Employee Document (`replaceOne`)
+
+Replacing the document of the employee "Shubhangi" with new details.
+
+```javascript
+db.employee.replaceOne(
+    { eid: 4 },
+    {
+        eid: 4,
+        ename: "Shubhangi",
+        designation: "Assistant Manager",
+        hiredate: new Date("2015-08-01"),
+        salary: 9000,
+        hobbies: ["traveling", "music", "sports"],
+        department: "Production"
+    }
+)
+```
+
+### 5. Add a New Hobby to an Employee (`updateOne` with `$push`)
+
+Add a new hobby "sketching" to the hobbies of employee "Akash" (eid: 3).
+
+```javascript
+db.employee.updateOne(
+    { eid: 3 },
+    { $push: { hobbies: "sketching" } }
+)
+```
+
+### 6. Remove a Hobby from Multiple Employees (`updateMany` with `$pull`)
+
+Remove "cricket" from the hobbies of all employees who have it listed.
+
+```javascript
+db.employee.updateMany(
+    { hobbies: "cricket" },
+    { $pull: { hobbies: "cricket" } }
+)
+```
+
+### 7. Conditional Upsert to Add New Employee (`updateOne` with `upsert`)
+
+If an employee with `eid: 11` does not exist, add them as a new document.
+
+```javascript
+db.employee.updateOne(
+    { eid: 11 },
+    {
+        $setOnInsert: {
+            ename: "Nikhil",
+            designation: "Salesman",
+            hiredate: new Date("2022-01-01"),
+            salary: 9000,
+            hobbies: ["reading", "gaming"],
+            department: "Sales"
+        }
+    },
+    { upsert: true }
+)
+```
+
+### 8. Update All Managers’ Designations to "Senior Manager" (`updateMany`)
+
+Update the designation of all employees who are currently "Manager" to "Senior Manager".
+
+```javascript
+db.employee.updateMany(
+    { designation: "Manager" },
+    { $set: { designation: "Senior Manager" } }
+)
+```
+
+### 9. Find and Update (Returning Updated Document) (`findOneAndUpdate`)
+
+Find the employee "Pushpa" (eid: 7) and update her salary, returning the updated document.
+
+```javascript
+db.employee.findOneAndUpdate(
+    { eid: 7 },
+    { $set: { salary: 20000 } },
+    { returnDocument: "after" }
+)
+```
+
+### 10. Add Unique Hobby to All Analysts’ Hobbies (`updateMany` with `$addToSet`)
+
+Add "coding" to the hobbies of all employees with the designation "Analyst" only if it doesn’t already exist.
+
+```javascript
+db.employee.updateMany(
+    { designation: "Analyst" },
+    { $addToSet: { hobbies: "coding" } }
+)
+```
+
+
+### 1. Delete a Specific Employee (`deleteOne`)
+
+Delete the employee with `eid: 10` (ename: "Bhakti").
+
+```javascript
+db.employee.deleteOne(
+    { eid: 10 }
+)
+```
+
+### 2. Delete All Employees in a Specific Department (`deleteMany`)
+
+Delete all employees who work in the "Sales" department.
+
+```javascript
+db.employee.deleteMany(
+    { department: "Sales" }
+)
+```
+
+### 3. Delete Employees with a Salary Below a Certain Amount (`deleteMany`)
+
+Delete all employees with a salary less than 10,000.
+
+```javascript
+db.employee.deleteMany(
+    { salary: { $lt: 10000 } }
+)
+```
+
+### 4. Delete Employees Hired Before a Certain Date (`deleteMany`)
+
+Delete all employees who were hired before January 1, 2016.
+
+```javascript
+db.employee.deleteMany(
+    { hiredate: { $lt: new Date("2016-01-01") } }
+)
+```
+
+### 5. Delete an Employee Based on Multiple Conditions (`deleteOne`)
+
+Delete the employee with the name "Sujit" and designation "Salesman".
+
+```javascript
+db.employee.deleteOne(
+    { ename: "Sujit", designation: "Salesman" }
+)
+```
+
+### 6. Delete Employees with a Specific Hobby (`deleteMany`)
+
+Delete all employees who have "painting" listed as a hobby.
+
+```javascript
+db.employee.deleteMany(
+    { hobbies: "painting" }
+)
+```
+
+### 7. Delete All Employees (`deleteMany`)
+
+Delete all documents from the `employee` collection. Use with caution, as this removes all data from the collection.
+
+```javascript
+db.employee.deleteMany({})
+```
+
+### 8. Delete Employees with a Specific Designation in a Specific Department (`deleteMany`)
+
+Delete all employees who are "Analysts" in the "Marketing" department.
+
+```javascript
+db.employee.deleteMany(
+    { designation: "Analyst", department: "Marketing" }
+)
+```
+
+### 9. Delete an Employee and Return the Deleted Document (`findOneAndDelete`)
+
+Find and delete the employee with `eid: 5` and return the deleted document.
+
+```javascript
+db.employee.findOneAndDelete(
+    { eid: 5 }
+)
+```
+
+### 10. Delete Employees Whose Hobbies Array Contains More Than Two Items (`deleteMany`)
+
+Delete all employees who have more than two hobbies.
+
+```javascript
+db.employee.deleteMany(
+    { hobbies: { $size: { $gt: 2 } } }
+)
+```
+
+ 
